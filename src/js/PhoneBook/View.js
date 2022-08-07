@@ -53,7 +53,8 @@ class View {
                 </div>
                 <div class="mb-3">
                   <label for="phone-number" class="form-label">Phone number</label>
-                  <input type="tel"  required name="phoneNumber" class="form-control" id="phone-number" placeholder="666-666-66-6">
+                  <span> для копии номера 380123456789</span>
+                  <input type="tel" pattern="[0-9]{12}" required name="phoneNumber" class="form-control" id="phone-number" placeholder="666666666666">
                 </div>
                  <div class="mb-3">
                   <label for="position" class="form-label">Position</label>
@@ -74,7 +75,7 @@ class View {
                 </div>
                 <div class="mb-3">
                   <label for="phone-number" class="form-label">Phone number</label>
-                  <input type="tel"  required name="phoneNumber" class="form-control" id="phone-number" placeholder="666-666-66-6" value = "${data.phoneNumber}">
+                  <input type="tel" pattern="[0-9]{12}" required name="phoneNumber" class="form-control" id="phone-number" placeholder="666-666-66-6" value = "${data.phoneNumber}">
                 </div>
                  <div class="mb-3">
                   <label for="position" class="form-label">Position</label>
