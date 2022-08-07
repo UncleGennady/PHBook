@@ -30,7 +30,7 @@ class Controller {
         this.#addFilterHandler();
         this.#addLoadedHandler();
     }
-
+    // вешает событие на елемент добавления контакта
     #handleContactAddBtn() {
         getElement(addContactSelector).addEventListener('click',this.#contactAddBtnHandler)
     }
@@ -42,6 +42,7 @@ class Controller {
     #contactAddBtnHandler = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        // при добавлении новых елементов сбрасываеться фильтр
         this.#resetFilterSearch();
         const {target} = e ;
         console.dir(target);
@@ -56,6 +57,7 @@ class Controller {
         this.#view.openModal();
 
     }
+    // закрывает модалку
     #resetContactFormHandler = e=> {
         e.preventDefault()
         e.stopPropagation()
@@ -95,6 +97,7 @@ class Controller {
 
 
     }
+    // срабатывает при изменении контакта
     #changeContactFormHandler = e => {
         e.preventDefault();
         e.stopPropagation();
@@ -109,6 +112,7 @@ class Controller {
         if(data.position === '') data.position = 'не указана';
         console.dir(data);
 
+    // изменяет данные в lS
         const savedData = this.#model.changeData(this.#contactCardId,data)
         console.log(savedData);
 
@@ -120,19 +124,20 @@ class Controller {
             this.#view.clearModalBody()},150);
 
         target.removeEventListener('submit', this.#changeContactFormHandler);
-
+    // перерисовывает измененный контакт
         this.#view.reRenderContact( this.#contactCard, savedData.data);
 
 
 
     }
+    // удаляет контакт
     #deleteContactFormHandler = e  => {
         if(!(e.target.id === "delete")) return;
         if(!(confirm('вы уверены ?'))) return;
 
         const data = this.#model.getData(contactKey)
         if(!data) return;
-
+    // перезаписывает lS уже без контакта
         const resetData = this.#model.resetData(data, this.#contactCardId);
 
         this.#view.deleteElement(this.#contactCard,resetData);
@@ -146,9 +151,12 @@ class Controller {
         if(!data) this.#view.renderContact(data);
         this.#view.renderContacts(data)
     }
+    // добавляет слушатель к контейнеру с контактами
     #addContactsEvent() {
        getElement(contacts).addEventListener('click', this.#switchCardEventHandler)
     }
+
+    // переключает события в замисимости от кнопки
     #switchCardEventHandler = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -166,7 +174,7 @@ class Controller {
         if(buttonView) return this.#viewHandler();
         if(buttonCall) return this.#callHandler();
     }
-
+    // добавляет слушатели к форме измениния контакта
     #changeHandler = e =>{
         const changeContactForm = this.#view.createChangeContactForm(this.#findElData());
         changeContactForm.addEventListener('reset',this.#resetContactFormHandler);
@@ -196,7 +204,7 @@ class Controller {
         const data = this.#findElData()
         window.open(`tel:${data.phoneNumber}`);
     }
-
+    // ищет елемент в данных полученых с LS
     #findElData (){
         return this.#model.getData(contactKey).find(i => i.id === (+this.#contactCardId));
     }
@@ -218,8 +226,7 @@ class Controller {
         console.log(this.#filterEl.value);
         const arrFilterValue = this.#filterEl.value.split('');
         const lengthSearchWord = arrFilterValue.length;
-        // уже не надо берем при клике, так бралось при вводе каждого нового символа
-        // const data = this.#model.getData(contactKey);
+
         console.log(data);
 
         const filteredData = data.reduce((acc, item)=>{
@@ -239,9 +246,10 @@ class Controller {
             return acc;
         }, [])
         console.log(filteredData);
+        // отображаем отфильтрованые контакты
         this.#view.renderFilterContacts(filteredData, contactsContainer);
     }
-
+// при добавлении новых елементов сбрасываеться фильтр
     #resetFilterSearch=() =>{
         if(this.#filterEl.value === "") return;
         this.#filterEl.value  = "";
